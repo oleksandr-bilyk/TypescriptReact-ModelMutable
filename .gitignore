@@ -1,2 +1,2 @@
-./tsout/**/*.map
-./tsout/**/*.js
+/tsout/**/*.map
+/tsout/**/*.js
