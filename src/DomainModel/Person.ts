@@ -4,7 +4,8 @@ type Gender = 'male' | 'female'
 
 type BlodGroup = 1 | 2 | 3 | 4
 
-class Person{
+class Person implements PersonName{
+    
     constructor(
         readonly id: PersonId,
         readonly firstName: string,
@@ -19,10 +20,7 @@ class Person{
     getAge(): number{
         return new Date().getFullYear() - this.birthDate.getFullYear()
     }
-}
 
-function PersonNameCompare(a: Person, b: Person) : boolean{
-    if (a.firstName > b.firstName) return true
-    else if (a.firstName === b.firstName) return a.lastName > b.lastName
-    else return false
+    getFirstName(): string { return this.firstName }
+    getLastName(): string { return this.lastName }
 }
