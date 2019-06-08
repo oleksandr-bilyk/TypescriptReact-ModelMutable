@@ -1,7 +1,7 @@
 // Volume in milliliters.
-type Volume = number
+export type Volume = number
 
-class Donation{
+export class Donation{
     constructor(
         readonly at:Date,
         readonly volume: Volume

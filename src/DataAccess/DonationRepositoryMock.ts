@@ -1,15 +1,19 @@
-class DonationRepositoryMock implements DonationRepository{
+import * as donationRepository from './DonationRepository'
+import * as person from './../DomainModel/Person'
+import * as donation from './../DomainModel/Donation'
+
+export class DonationRepositoryMock implements donationRepository.DonationRepository{
     private items: DbRecord[]
 
     constructor(){
         this.items = []
     }
 
-    GetDonorRecords(personId: PersonId): Donation[] {
+    GetDonorRecords(personId: person.PersonId): donation.Donation[] {
         throw new Error("Method not implemented.");
     }    
     
-    Add(personId: PersonId, record: Donation): void {
+    Add(personId: person.PersonId, record: donation.Donation): void {
         this.items.push(
             new DbRecord(
                 personId,
@@ -19,11 +23,11 @@ class DonationRepositoryMock implements DonationRepository{
         )
     }
 
-    RemoveByPersonAt(personId: PersonId, at: Date): void {
+    RemoveByPersonAt(personId: person.PersonId, at: Date): void {
         this.removeByPredicate(item => item.personId === personId && item.at === at)
     }
 
-    RemoveByPerson(personId: PersonId): void {
+    RemoveByPerson(personId: person.PersonId): void {
         this.removeByPredicate(item => item.personId === personId)
     }
 
@@ -39,9 +43,9 @@ class DonationRepositoryMock implements DonationRepository{
 
 class DbRecord {
     constructor(
-        readonly personId: PersonId, 
+        readonly personId: person.PersonId, 
         readonly at: Date, 
-        readonly volume: Volume) {
+        readonly volume: donation.Volume) {
         
     }
 }

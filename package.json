@@ -4,7 +4,8 @@
   "description": "",
   "main": "./tsout/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "magic": "webpack"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +13,13 @@
     "@types/node": "^12.0.3",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
+  },
+  "dependencies": {
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "ts-loader": "^6.0.2",
+    "webpack": "^4.33.0"
   }
 }

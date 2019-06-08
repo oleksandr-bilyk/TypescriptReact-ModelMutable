@@ -1,4 +1,6 @@
-class GenderSelectionViewModel{
+import * as domainPerson from './../../DomainModel/Person'
+
+export class GenderSelectionViewModel{
     private itemSelected: GenderViewModel
     items: GenderViewModel[]
     
@@ -10,7 +12,7 @@ class GenderSelectionViewModel{
         this.itemSelected = this.items[0]
     }
 
-    getItemSelected(){ return this.getItemSelected }
+    getItemSelected(){ return this.itemSelected }
     
     setItemSelected(value: GenderViewModel){ 
         if (this.items.includes(value)){
@@ -18,8 +20,10 @@ class GenderSelectionViewModel{
         }
         this.itemSelected = value
     }
+
+    getValue(){return this.itemSelected.gender}
 }
 
-class GenderViewModel{
-    constructor(readonly title: string, readonly gender: Gender){}
+export class GenderViewModel{
+    constructor(readonly title: string, readonly gender: domainPerson.Gender){}
 }

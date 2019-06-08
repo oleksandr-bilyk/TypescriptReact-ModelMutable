@@ -1,6 +1,9 @@
-class BloodGroupOptionalSelectionViewModel{
+import * as objectEvents from './../../Events/Event'
+import * as blodGroup from './../../../DomainModel/BlodGroup'
+
+export class BloodGroupOptionalSelectionViewModel{
     readonly items: BloodGroupOptionalViewModel[]
-    private readonly itemSelectedChanges: EventArray<BlodGroup | null> = new EventArray()
+    private readonly itemSelectedChanges: objectEvents.EventArray<blodGroup.BlodGroup | null> = new objectEvents.EventArray()
     private itemSelected: BloodGroupOptionalViewModel
 
     constructor(){
@@ -8,14 +11,14 @@ class BloodGroupOptionalSelectionViewModel{
         let allCases = new BloodGroupOptionalViewModel("-- All --", null)
         this.items.push(allCases)
         this.itemSelected = allCases
-        BloodGroupPresentationLogic.getAllTitles().forEach(
+        blodGroup.getAllTitles().forEach(
             ([title, group]) => {
                 this.items.push(new BloodGroupOptionalViewModel(title, group))
             }
         )
     }
 
-    getItemSelectedChanges() : Event<BlodGroup | null> {return this.itemSelectedChanges}
+    getItemSelectedChanges() : objectEvents.Event<blodGroup.BlodGroup | null> {return this.itemSelectedChanges}
 
     getItemSelected(){ return this.itemSelected }
 
@@ -30,9 +33,9 @@ class BloodGroupOptionalSelectionViewModel{
     getValue(){ return this.itemSelected.value }
 }
 
-class BloodGroupOptionalViewModel{
+export class BloodGroupOptionalViewModel{
     constructor(
         readonly title: string, 
-        readonly value: BlodGroup | null
+        readonly value: blodGroup.BlodGroup | null
     ){}
 }

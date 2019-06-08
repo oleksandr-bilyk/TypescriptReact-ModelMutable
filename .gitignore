@@ -1,2 +1,3 @@
 /tsout/**/*.map
 /tsout/**/*.js
+/node_modules

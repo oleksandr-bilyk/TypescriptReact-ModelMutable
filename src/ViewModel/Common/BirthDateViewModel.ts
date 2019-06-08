@@ -1,4 +1,4 @@
-class BirthDateViewModel{
+export class BirthDateViewModel{
     constructor(){
         let now = new Date();
         let millisecPerDay = 1000 * 60 * 24

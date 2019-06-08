@@ -1,14 +1,20 @@
-class AddPersonModels{
+import * as objectEvents from './Events/Event'
+import * as birthDateViewModel from './Common/BirthDateViewModel'
+import * as genderSelectionViewModel from './Common/GenderSelectionViewModel'
+import * as bloodGroupRequiredSelectionViewModel from './Common/BloodGroupModels/BloodGroupRequiredSelectionViewModel'
+import * as person from './../DomainModel/Person'
+
+export class AddPersonModels{
     private firstName: string = ''
     private lastName: string = ''
-    readonly birthDate: BirthDateViewModel
-    readonly gender: GenderSelectionViewModel
-    readonly blodGroup: BloodGroupRequiredSelectionViewModel
+    readonly birthDate: birthDateViewModel.BirthDateViewModel
+    readonly gender: genderSelectionViewModel.GenderSelectionViewModel
+    readonly blodGroup: bloodGroupRequiredSelectionViewModel.BloodGroupRequiredSelectionViewModel
 
     constructor(){
-        this.birthDate = new BirthDateViewModel()
-        this.gender = new GenderSelectionViewModel()
-        this.blodGroup = new BloodGroupRequiredSelectionViewModel()
+        this.birthDate = new birthDateViewModel.BirthDateViewModel()
+        this.gender = new genderSelectionViewModel.GenderSelectionViewModel()
+        this.blodGroup = new bloodGroupRequiredSelectionViewModel.BloodGroupRequiredSelectionViewModel()
     }
 
     getFirstName():string{
@@ -27,21 +33,21 @@ class AddPersonModels{
         this.lastName = value
     }
 
-    private readonly newPersonEvent: EventArray<Person> = new EventArray()
+    private readonly newPersonEvent: objectEvents.EventArray<person.Person> = new objectEvents.EventArray()
 
-    getNewPersonEvent(): Event<Person>{return this.newPersonEvent}
+    getNewPersonEvent(): objectEvents.Event<person.Person>{return this.newPersonEvent}
 
-    public add(): void{
-        let person = new Person(
-            Guid.newGuid(),
+    add(): void{
+        let p = new person.Person(
+            person.newPersonId(),
             this.firstName,
             this.lastName,
-            new Date(),
-            "male",
-            1
+            this.birthDate.getDate(),
+            this.gender.getValue(),
+            this.blodGroup.getValue()
         )
 
-        this.newPersonEvent.rise(person)
+        this.newPersonEvent.rise(p)
 
         this.firstName = ''
         this.lastName = ''

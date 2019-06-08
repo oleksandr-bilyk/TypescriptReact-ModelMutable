@@ -1,9 +1,9 @@
-interface Event<T>{
+export interface Event<T>{
     add(handler: {(data: T): void}): void
     remove(handler: {(data: T): void}): void
 }
 
-class EventArray<T> implements Event<T>{
+export class EventArray<T> implements Event<T>{
     add(handler: (data: T) => void): void {
         this.collection.push(handler)
     }
@@ -12,6 +12,7 @@ class EventArray<T> implements Event<T>{
             if (this.collection[i] == handler){
                 delete this.collection[i]
             }
+     
         }
     }
 
@@ -20,6 +21,4 @@ class EventArray<T> implements Event<T>{
     }
 
     private readonly collection: {(data: T): void}[] = []
-
-
 }
