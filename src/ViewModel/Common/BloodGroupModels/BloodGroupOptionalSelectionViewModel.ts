@@ -1,16 +1,17 @@
-import * as objectEvents from './../../Events/Event'
-import * as blodGroup from './../../../DomainModel/BlodGroup'
+import * as blodGroup from "./../../../DomainModel/BlodGroup";
+import * as objectEvents from "./../../Events/Event";
 
 export class BloodGroupOptionalSelectionViewModel{
-    readonly items: BloodGroupOptionalViewModel[]
-    private readonly itemSelectedChanges: objectEvents.EventArray<blodGroup.BlodGroup | null> = new objectEvents.EventArray()
-    private itemSelected: BloodGroupOptionalViewModel
+    public readonly items: BloodGroupOptionalViewModel[];
+    private readonly itemSelectedChanges: objectEvents.EventArray<blodGroup.BlodGroup | null> =
+        new objectEvents.EventArray();
+    private itemSelected: BloodGroupOptionalViewModel;
 
     constructor(){
-        this.items = []
-        let allCases = new BloodGroupOptionalViewModel("-- All --", null)
-        this.items.push(allCases)
-        this.itemSelected = allCases
+        this.items = [];
+        const allCases = new BloodGroupOptionalViewModel("-- All --", null);
+        this.items.push(allCases);
+        this.itemSelected = allCases;
         blodGroup.getAllTitles().forEach(
             ([title, group]) => {
                 this.items.push(new BloodGroupOptionalViewModel(title, group))

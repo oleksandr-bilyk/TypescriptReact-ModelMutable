@@ -1,16 +1,17 @@
-<title>
-    Type Script Demo
-</title>
-<body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Type Script Demo
+        </title>
+    </head>
+    <body>
+        <h1>Static header</h1>
+        <p style="color:red">I am a paragraph</p>
+        <div id="applicaitonDomContainer"/>
 
-    <div id="applicaitonDomContainer"/>
-    <!-- Load React. -->
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
-    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-
-    <!-- Load our React component. -->
-    <script src="./../tsout/index.js"></script>
-    
-</body>
+        <!-- Load our React component. -->
+        <script src="./../out/index.js"></script>
+        
+    </body>
+</html>

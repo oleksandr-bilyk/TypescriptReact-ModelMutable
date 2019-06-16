@@ -13,12 +13,37 @@ export interface Props {
 function Hello() {
     let a = 5;
   
-    return (
-        <ul className="list">
-            <li>Item 1</li>
-            <li>Item 1</li>
-        </ul>
-    );
+    // return (
+    //     <ul className="list">
+    //         <li>Item 1</li>
+    //         <li>Item 1</li>
+    //     </ul>
+    // );
+
+    return React.createElement(
+        "ul",
+        { class: "list"},
+        React.createElement(
+            "li",
+            null,
+            "Item 1"
+        ),
+        React.createElement(
+            "li",
+            null,
+            "Item 2"
+        ),
+        React.createElement(
+            "li",
+            null,
+            "Item 3"
+        ),
+        React.createElement(
+            "li",
+            null,
+            "Item 4"
+        )
+    )
 }
 
 export default Hello

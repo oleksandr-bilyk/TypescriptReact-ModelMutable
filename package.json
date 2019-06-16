@@ -5,6 +5,8 @@
   "main": "./tsout/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p",
+    "webpack-dev": "webpack-dev-server -d --content-base ./public",
     "magic": "webpack"
   },
   "author": "",
@@ -12,14 +14,18 @@
   "devDependencies": {
     "@types/node": "^12.0.3",
     "tslint": "^5.16.0",
-    "typescript": "^3.4.5"
+    "typescript": "^3.4.5",
+    "webpack-cli": "^3.3.3"
   },
   "dependencies": {
     "@types/react": "^16.8.19",
     "@types/react-dom": "^16.8.4",
+    "clean-webpack-plugin": "^3.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "ts-loader": "^6.0.2",
-    "webpack": "^4.33.0"
+    "webpack": "^4.33.0",
+    "webpack-dev-server": "^3.7.1"
   }
 }
