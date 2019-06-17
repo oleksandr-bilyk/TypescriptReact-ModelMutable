@@ -22,7 +22,7 @@ function Hello() {
 
     return React.createElement(
         "ul",
-        { class: "list"},
+        null,
         React.createElement(
             "li",
             null,

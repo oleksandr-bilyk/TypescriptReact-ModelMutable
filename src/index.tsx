@@ -2,23 +2,25 @@ import * as model from './ViewModel/ApplicationViewModel'
 import Home from './home'
 import * as ReactDOM from 'react-dom';
 import React from 'react';
-//import * as css from './index.css'
+import AddUserView from "./View/AddPersonView"
 
-let m = new model.ApplicationViewModel()
+let application = new model.ApplicationViewModel()
 
 const domContainer = document.getElementById('applicaitonDomContainer')
 
-let a = <div>
-    <div id="addUserPanel" >
-        <span>Add user</span>
+let body = 
+<div>
+    <div id="addUserPanel">
+        <AddUserView model={application.addPerson}/>
+        <Home/>
     </div>
-    <div id="mainPanel">
-
+    <div id="mainPanel">    
+        
     </div>
 </div>
 
 ReactDOM.render(
-    <Home/>,
+    body,
     domContainer);
 
 
