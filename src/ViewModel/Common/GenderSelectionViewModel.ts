@@ -1,4 +1,4 @@
-import * as domainPerson from './../../DomainModel/Person'
+import {Gender} from './../../DomainModel/Person'
 
 export class GenderSelectionViewModel{
     private itemSelected: GenderViewModel
@@ -25,5 +25,5 @@ export class GenderSelectionViewModel{
 }
 
 export class GenderViewModel{
-    constructor(readonly title: string, readonly gender: domainPerson.Gender){}
+    constructor(readonly title: string, readonly gender: Gender){}
 }

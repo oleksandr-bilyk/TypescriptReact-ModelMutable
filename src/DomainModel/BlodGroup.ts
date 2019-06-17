@@ -11,7 +11,7 @@ export function getAllTitles(): [string, BlodGroup][]{
     return items.slice()
 }
 
-export function title(blodGroup: BlodGroup): string{
+export function getBloodGroupTitle(blodGroup: BlodGroup): string{
     for (let i = 0; i < items.length; i++){
         let [title, value] = items[i]
         if (value == blodGroup) return title

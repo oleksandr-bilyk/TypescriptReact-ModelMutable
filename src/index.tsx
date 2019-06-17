@@ -1,11 +1,11 @@
-import * as model from './ViewModel/ApplicationViewModel'
+import {newApplicationViewModel} from './ViewModel/CompositionRoot'
 import Home from './home'
 import * as ReactDOM from 'react-dom';
 import React from 'react';
 import AddUserView from "./View/AddPersonView"
-import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
-let application = new model.ApplicationViewModel()
+let application = newApplicationViewModel()
 
 const domContainer = document.getElementById('applicaitonDomContainer')
 

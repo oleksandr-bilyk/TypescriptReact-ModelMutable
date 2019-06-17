@@ -1,35 +1,42 @@
-import * as donationRepositoryInterface from "./../../DataAccess/DonationRepository";
-import * as donationRepositoryMock from "./../../DataAccess/DonationRepositoryMock";
-import * as personRepositoryInterface from "./../../DataAccess/PersonRepository";
-import * as personRepositoryMock from "./../../DataAccess/PersonRepositoryMock";
-import * as blodGroup from "./../../DomainModel/BlodGroup";
-import * as person from "./../../DomainModel/Person";
-import * as bloodGroupSelection from "./../../ViewModel/Common/BloodGroupModels/BloodGroupOptionalSelectionViewModel";
-import * as objectEvents from "./../../ViewModel/Events/Event";
-import * as donationListViewModel from "./Donations/DonationListViewModel";
+import {DonationRepository} from "./../../DataAccess/DonationRepository";
+import {PersonRepository} from "./../../DataAccess/PersonRepository";
+import {getBloodGroupTitle} from "./../../DomainModel/BlodGroup";
+import {Person, PersonId, PersonNameCompare} from "./../../DomainModel/Person";
+import {BloodGroupOptionalSelectionViewModel} from "./../../ViewModel/Common/BloodGroupModels/BloodGroupOptionalSelectionViewModel";
+import {Event, EventArray} from "./../../ViewModel/Events/Event";
+import {DonationListViewModel} from "./Donations/DonationListViewModel";
 
+export interface DataAccessProvider{
+    personRepository: PersonRepository
+        
+    donationRepository: DonationRepository
+}
 
 export class PersonListViewModel {
-    readonly bloodGroupFilter: bloodGroupSelection.BloodGroupOptionalSelectionViewModel
-    private readonly personRepository: personRepositoryInterface.PersonRepository
-    private readonly donationRepository: donationRepositoryInterface.DonationRepository
-    private readonly itemsChangedEvent: objectEvents.EventArray<void> = new objectEvents.EventArray()
+    private readonly personViewModelFactory: PersonViewModelFactory
+    readonly bloodGroupFilter: BloodGroupOptionalSelectionViewModel
+    private readonly personRepository: PersonRepository
+    private readonly donationRepository: DonationRepository
+    private readonly itemsChangedEvent: EventArray<void> = new EventArray()
     private nameFilter: string = ""
     private itemsFiltered: PersonViewModel[] = []
     private itemSelected: PersonViewModel | null = null
 
+    constructor(
+        dataAccess: DataAccessProvider,
+        personViewModelFactory: PersonViewModelFactory
+    ) {
+        this.personViewModelFactory = personViewModelFactory
+        this.personRepository = dataAccess.personRepository
+        this.donationRepository = dataAccess.donationRepository
 
-    constructor() {
-        this.personRepository = new personRepositoryMock.PersonRepositoryMock()
-        this.donationRepository = new donationRepositoryMock.DonationRepositoryMock()
-
-        this.bloodGroupFilter = new bloodGroupSelection.BloodGroupOptionalSelectionViewModel()
+        this.bloodGroupFilter = new BloodGroupOptionalSelectionViewModel()
         this.bloodGroupFilter.getItemSelectedChanges().add((_) => this.updateItemsFiltered())
 
         this.updateItemsFiltered()
     }
 
-    getItemsChangedEvent(): objectEvents.Event<void> { return this.itemsChangedEvent }
+    getItemsChangedEvent(): Event<void> { return this.itemsChangedEvent }
 
     getItems() { return this.itemsFiltered }
 
@@ -49,7 +56,7 @@ export class PersonListViewModel {
         this.updateItemsFiltered()
     }
 
-    Add(person: person.Person) {
+    Add(person: Person) {
         this.personRepository.AddPerson(person)
 
         this.updateItemsFiltered()
@@ -60,8 +67,8 @@ export class PersonListViewModel {
         this.updateItemsFiltered()
     }
 
-    private newPersonViewModel(person: person.Person): PersonViewModel {
-        var model = new PersonViewModel(person)
+    private newPersonViewModel(person: Person): PersonViewModel {
+        var model = this.personViewModelFactory(person)
         model.getRemovingEvent().add(this.onItemRemoving.bind(this))
         return model
     }
@@ -94,22 +101,28 @@ export class PersonListViewModel {
             source = source.filter(i => i.getBloodGroup() == bloodGroupFilter);
         }
 
-        return source.sort(person.PersonNameCompare.compare);
+        return source.sort(PersonNameCompare.compare);
     }
 }
 
-export class PersonViewModel {
-    private data: person.Person
-    donations: donationListViewModel.DonationListViewModel
-    private readonly removingEvent: objectEvents.EventArray<PersonViewModel> = new objectEvents.EventArray()
+export type PersonViewModelFactory = (person: Person) => PersonViewModel
 
-    constructor(person: person.Person) {
+export type DonationListViewModelFactory = (personId: PersonId) => DonationListViewModel
+
+export class PersonViewModel {
+    private data: Person
+    donations: DonationListViewModel
+    private readonly removingEvent: EventArray<PersonViewModel> = new EventArray()
+
+    constructor(
+        person: Person,
+        donationListViewModelFactory: DonationListViewModelFactory) {
         this.data = person
 
-        this.donations = new donationListViewModel.DonationListViewModel(person.id)
+        this.donations = donationListViewModelFactory(person.id)
     }
 
-    getRemovingEvent(): objectEvents.EventArray<PersonViewModel> { return this.removingEvent }
+    getRemovingEvent(): EventArray<PersonViewModel> { return this.removingEvent }
 
     getPersonId() { return this.data.id }
 
@@ -124,7 +137,7 @@ export class PersonViewModel {
             " " +
             this.data.lastName +
             " | Group: " +
-            blodGroup.title(this.data.blodGroup);
+            getBloodGroupTitle(this.data.blodGroup);
     }
 
     remove() {

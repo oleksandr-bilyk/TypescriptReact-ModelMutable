@@ -1,20 +1,20 @@
-import * as objectEvents from './Events/Event'
-import * as birthDateViewModel from './Common/BirthDateViewModel'
-import * as genderSelectionViewModel from './Common/GenderSelectionViewModel'
-import * as bloodGroupRequiredSelectionViewModel from './Common/BloodGroupModels/BloodGroupRequiredSelectionViewModel'
-import * as person from './../DomainModel/Person'
+import {Event, EventArray} from './Events/Event'
+import {BirthDateViewModel} from './Common/BirthDateViewModel'
+import {GenderSelectionViewModel} from './Common/GenderSelectionViewModel'
+import {BloodGroupRequiredSelectionViewModel} from './Common/BloodGroupModels/BloodGroupRequiredSelectionViewModel'
+import {Person, newPersonId} from './../DomainModel/Person'
 
 export class AddPersonModels{
     private firstName: string = ''
     private lastName: string = ''
-    readonly birthDate: birthDateViewModel.BirthDateViewModel
-    readonly gender: genderSelectionViewModel.GenderSelectionViewModel
-    readonly blodGroup: bloodGroupRequiredSelectionViewModel.BloodGroupRequiredSelectionViewModel
+    readonly birthDate: BirthDateViewModel
+    readonly gender: GenderSelectionViewModel
+    readonly blodGroup: BloodGroupRequiredSelectionViewModel
 
     constructor(){
-        this.birthDate = new birthDateViewModel.BirthDateViewModel()
-        this.gender = new genderSelectionViewModel.GenderSelectionViewModel()
-        this.blodGroup = new bloodGroupRequiredSelectionViewModel.BloodGroupRequiredSelectionViewModel()
+        this.birthDate = new BirthDateViewModel()
+        this.gender = new GenderSelectionViewModel()
+        this.blodGroup = new BloodGroupRequiredSelectionViewModel()
     }
 
     getFirstName():string{
@@ -46,13 +46,13 @@ export class AddPersonModels{
         return this.getFirstNameError() !== undefined || this.getLastNameError() !== undefined;
     }
 
-    private readonly newPersonEvent: objectEvents.EventArray<person.Person> = new objectEvents.EventArray()
+    private readonly newPersonEvent: EventArray<Person> = new EventArray()
 
-    getNewPersonEvent(): objectEvents.Event<person.Person>{return this.newPersonEvent}
+    getNewPersonEvent(): Event<Person>{return this.newPersonEvent}
 
     add(): void{
-        let p = new person.Person(
-            person.newPersonId(),
+        let p = new Person(
+            newPersonId(),
             this.firstName,
             this.lastName,
             this.birthDate.getDate(),

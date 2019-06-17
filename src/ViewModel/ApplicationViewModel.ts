@@ -1,18 +1,20 @@
-import * as addPersonModels from './AddPersonModels'
-import * as personListViewModel from './DonorsListModels/PersonListViewModel'
-import * as person from './../DomainModel/Person'
+import {AddPersonModels} from './AddPersonModels'
+import {PersonListViewModel} from './DonorsListModels/PersonListViewModel'
+import {Person} from './../DomainModel/Person'
 
 export class ApplicationViewModel{
-    addPerson: addPersonModels.AddPersonModels
-    donorsList: personListViewModel.PersonListViewModel
+    addPerson: AddPersonModels
+    donorsList: PersonListViewModel
 
-    constructor(){
-        this.addPerson = new addPersonModels.AddPersonModels()
-        this.donorsList = new personListViewModel.PersonListViewModel()
+    constructor(
+        donorsList: PersonListViewModel
+    ){
+        this.addPerson = new AddPersonModels()
+        this.donorsList = donorsList
         this.addPerson.getNewPersonEvent().add(this.onNewPerson.bind(this))
     }
 
-    private onNewPerson(person: person.Person){
+    private onNewPerson(person: Person){
         this.donorsList.Add(person)
     }
 }

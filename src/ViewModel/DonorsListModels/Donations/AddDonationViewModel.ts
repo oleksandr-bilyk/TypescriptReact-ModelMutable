@@ -1,5 +1,5 @@
-import * as objectEvents from './../../Events/Event'
-import * as domainDonations from './../../../DomainModel/Donation'
+import {Event, EventArray} from './../../Events/Event'
+import {Donation} from './../../../DomainModel/Donation'
 
 export class AddDonationViewModel{
     at: Date = new Date
@@ -7,12 +7,12 @@ export class AddDonationViewModel{
 
     constructor(){}
 
-    private readonly newDonation: objectEvents.EventArray<domainDonations.Donation> = new objectEvents.EventArray()
-    getNewDonationEvent(): objectEvents.Event<domainDonations.Donation>{return this.newDonation}
+    private readonly newDonation: EventArray<Donation> = new EventArray()
+    getNewDonationEvent(): Event<Donation>{return this.newDonation}
 
     add(){
         if (this.newDonation != null){
-            let model = new domainDonations.Donation(this.at, this.milliliters)
+            let model = new Donation(this.at, this.milliliters)
             this.newDonation.rise(model)
         }
     }

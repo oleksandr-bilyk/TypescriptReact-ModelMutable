@@ -1,9 +1,9 @@
-import * as blodGroup from './BlodGroup';
-import * as guid from './../DomainModel/Guid'
+import {BlodGroup} from './BlodGroup';
+import {newGuid} from './../DomainModel/Guid'
 
 export type PersonId = string & { readonly brand: unique symbol}
 
-export function newPersonId(){ return <PersonId>guid.newGuid()}
+export function newPersonId(){ return <PersonId>newGuid()}
 
 export type Gender = 'male' | 'female'
 
@@ -28,7 +28,7 @@ export class Person implements PersonName{
         readonly lastName: string,
         readonly birthDate: Date,
         readonly gender: Gender,
-        readonly blodGroup: blodGroup.BlodGroup
+        readonly blodGroup: BlodGroup
     ){
     }
 

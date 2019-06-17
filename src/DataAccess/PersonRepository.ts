@@ -1,8 +1,8 @@
-import * as domainPerson from './../DomainModel/Person'
+import {Person, PersonId} from './../DomainModel/Person'
 
 export interface PersonRepository {
-    GetPersonList(): domainPerson.Person[]
-    AddPerson(person: domainPerson.Person): void
-    Remove(personId: domainPerson.PersonId): void
-    Rename(personId: domainPerson.PersonId, fistName: string, lastName: string): void
+    GetPersonList(): Person[]
+    AddPerson(person: Person): void
+    Remove(personId: PersonId): void
+    Rename(personId: PersonId, fistName: string, lastName: string): void
 }

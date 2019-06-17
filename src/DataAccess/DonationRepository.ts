@@ -1,10 +1,10 @@
-import * as domainPerson from './../DomainModel/Person'
-import * as domainDonation from './../DomainModel/Donation'
+import {PersonId} from './../DomainModel/Person'
+import {Donation} from './../DomainModel/Donation'
 
 export interface DonationRepository
 {
-    GetDonorRecords(personId:  domainPerson.PersonId): domainDonation.Donation[]
-    Add(personId: domainPerson.PersonId, record: domainDonation.Donation): void
-    RemoveByPersonAt(personId: domainPerson.PersonId, at: Date): void
-    RemoveByPerson(personId: domainPerson.PersonId): void
+    GetDonorRecords(personId:  PersonId): Donation[]
+    Add(personId: PersonId, record: Donation): void
+    RemoveByPersonAt(personId: PersonId, at: Date): void
+    RemoveByPerson(personId: PersonId): void
 }
