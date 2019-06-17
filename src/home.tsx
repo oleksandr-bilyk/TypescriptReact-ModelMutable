@@ -8,7 +8,7 @@ export interface Props {
     enthusiasmLevel?: number;
     onIncrement?: () => void;
     onDecrement?: () => void;
-  }
+}
 
 function Hello() {
     let a = 5;

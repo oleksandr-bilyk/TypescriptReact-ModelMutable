@@ -6,29 +6,42 @@ type AddUserViewParam = {
     model: AddPersonModels.AddPersonModels
 }
 
+type State  = {
+    firstName: string,
+    lastName: string
+}
+
 function AddUserView(param: AddUserViewParam) {
-    const [firstName, firstNameSetState] = React.useState<string>(() => param.model.getFirstName())
-    const [lastName, lastNameSetState] = React.useState<string>(() => param.model.getLastName())
+    const [state, setState] = React.useState<State>(
+        () => {
+            return {
+                firstName: param.model.getFirstName(),
+                lastName: param.model.getLastName() 
+            }
+        }
+    )
 
     return <div>
         <h2>Add user</h2>
         <span>First name:</span><br/>
         <input type="text" id="firstNameInput" 
-            value={firstName}
+            value={state.firstName}
             onChange={
                 event => {
-                    firstNameSetState(event.currentTarget.value)
-                    param.model.setFirstName(event.currentTarget.value)
+                    let newState = { ...state, firstName: event.currentTarget.value }
+                    setState(newState)
+                    param.model.setFirstName(newState.firstName)
                 }
             }/>
         <br/>
         <span>Last name:</span><br/>
         <input type="text" id="lastNameInput" 
-            value={lastName} 
+            value={state.lastName} 
             onChange={
                 event => {
-                    lastNameSetState(event.currentTarget.value)
-                    param.model.setLastName(event.currentTarget.value)
+                    let newState = { ...state, lastName: event.currentTarget.value }
+                    setState(newState)
+                    param.model.setLastName(newState.lastName)
                 }
             }/>
         <br/>
