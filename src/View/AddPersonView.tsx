@@ -1,12 +1,17 @@
 import React from 'react';
-import * as AddPersonModels from '../ViewModel/AddPersonModels';
+import { AddPersonModels } from '../ViewModel/AddPersonModels';
 import { stat } from 'fs';
+import { 
+    TextField,
+    PrimaryButton 
+} from 'office-ui-fabric-react';
+import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
 
 type AddUserViewParam = {
-    model: AddPersonModels.AddPersonModels
+    model: AddPersonModels
 }
 
-type State  = {
+type State = {
     firstName: string,
     lastName: string
 }
@@ -21,32 +26,38 @@ function AddUserView(param: AddUserViewParam) {
         }
     )
 
-    return <div>
+    return <Stack styles={{root:{width: 200}}}>
         <h2>Add user</h2>
-        <span>First name:</span><br/>
-        <input type="text" id="firstNameInput" 
-            value={state.firstName}
+        <TextField 
+            label="First name:"
+            errorMessage={param.model.getFirstNameError()}
+            defaultValue={state.firstName} 
             onChange={
-                event => {
-                    let newState = { ...state, firstName: event.currentTarget.value }
+                (event, newValue)=>{
+                    let newState = { ...state, firstName: newValue || "" }
                     setState(newState)
                     param.model.setFirstName(newState.firstName)
                 }
-            }/>
-        <br/>
-        <span>Last name:</span><br/>
-        <input type="text" id="lastNameInput" 
-            value={state.lastName} 
+            }
+            />
+        <TextField 
+            label="Last name:" 
+            defaultValue={state.lastName} 
+            errorMessage={param.model.getLastNameError()}
             onChange={
-                event => {
-                    let newState = { ...state, lastName: event.currentTarget.value }
+                (event, newValue) => {
+                    let newState = { ...state, lastName: newValue || "" }
                     setState(newState)
                     param.model.setLastName(newState.lastName)
                 }
             }/>
         <br/>
-        <input type="submit" id="create" value="Add" onClick={event => param.model.add()}/>
-    </div>
+        <PrimaryButton 
+            disabled={param.model.testError()}
+            text="Add" 
+            onClick={event => param.model.add()} 
+            styles={{root:{width:"75px", marginLeft:"auto"}}}/>
+    </Stack>
 }
 
 export default AddUserView

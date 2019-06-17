@@ -24,6 +24,10 @@ export class AddPersonModels{
     setFirstName(value: string){
         this.firstName = value
     }
+    getFirstNameError(): string | undefined {
+        if (this.firstName.length > 0) return undefined;
+        else return "First Name is required.";
+    }
 
     getLastName():string{
         return this.lastName
@@ -31,6 +35,15 @@ export class AddPersonModels{
 
     setLastName(value: string){
         this.lastName = value
+    }
+
+    getLastNameError(): string | undefined {
+        if (this.lastName.length > 0) return undefined;
+        else return "Last Name is required.";
+    }
+
+    testError(){
+        return this.getFirstNameError() !== undefined || this.getLastNameError() !== undefined;
     }
 
     private readonly newPersonEvent: objectEvents.EventArray<person.Person> = new objectEvents.EventArray()

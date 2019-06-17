@@ -3,13 +3,14 @@ import Home from './home'
 import * as ReactDOM from 'react-dom';
 import React from 'react';
 import AddUserView from "./View/AddPersonView"
+import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
 
 let application = new model.ApplicationViewModel()
 
 const domContainer = document.getElementById('applicaitonDomContainer')
 
 let body = 
-<div>
+<Stack horizontal>
     <div id="addUserPanel">
         <AddUserView model={application.addPerson}/>
         <Home/>
@@ -17,7 +18,7 @@ let body =
     <div id="mainPanel">    
         
     </div>
-</div>
+</Stack>
 
 ReactDOM.render(
     body,
