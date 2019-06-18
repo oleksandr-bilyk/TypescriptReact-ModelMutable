@@ -1,5 +1,5 @@
 import {newApplicationViewModel} from './ViewModel/CompositionRoot'
-import Home from './home'
+import Main from './View/Main'
 import * as ReactDOM from 'react-dom';
 import React from 'react';
 import AddUserView from "./View/AddPersonView"
@@ -13,17 +13,15 @@ let body =
 <Stack horizontal>
     <div id="addUserPanel">
         <AddUserView model={application.addPerson}/>
-        <Home/>
     </div>
-    <div id="mainPanel">    
-        
+    <div id="mainPanel" style={{width:"100%", float: "left", border:"1px solid red"}}>    
+        <Main model={application.donorsList}/>
     </div>
 </Stack>
 
 ReactDOM.render(
     body,
     domContainer);
-
 
 /* let message : string = "Hello Web";
 document.body.innerHTML = message; */

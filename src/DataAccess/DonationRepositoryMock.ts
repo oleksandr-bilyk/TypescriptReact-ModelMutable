@@ -3,7 +3,7 @@ import {PersonId} from './../DomainModel/Person'
 import {Donation, Volume} from './../DomainModel/Donation'
 
 export class DonationRepositoryMock implements DonationRepository{
-    private items: DbRecord[]
+    private readonly items: DbRecord[]
 
     constructor(){
         this.items = []

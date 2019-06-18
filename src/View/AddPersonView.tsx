@@ -5,7 +5,7 @@ import {
     TextField,
     PrimaryButton 
 } from 'office-ui-fabric-react';
-import { Stack, IStackProps } from 'office-ui-fabric-react/lib/Stack';
+import { Stack } from 'office-ui-fabric-react/lib/Stack';
 
 type AddUserViewParam = {
     model: AddPersonModels
