@@ -18,7 +18,7 @@ export class PersonListViewModel {
     private readonly personRepository: PersonRepository
     private readonly donationRepository: DonationRepository
     private readonly itemsChangedEvent: EventArray<void> = new EventArray()
-    private nameFilter: string = ""
+    private _nameFilter: string = ""
     private itemsFiltered: PersonViewModel[] = []
     private itemSelected: PersonViewModel | null = null
 
@@ -31,12 +31,14 @@ export class PersonListViewModel {
         this.donationRepository = dataAccess.donationRepository
 
         this.bloodGroupFilter = new BloodGroupOptionalSelectionViewModel()
-        this.bloodGroupFilter.getItemSelectedChanges().add((_) => this.updateItemsFiltered())
+        this.bloodGroupFilter.itemSelectedChanged.add((_) => this.updateItemsFiltered())
 
         this.updateItemsFiltered()
     }
 
     getItemsChangedEvent(): Event<void> { return this.itemsChangedEvent }
+
+    getItemsCount() {return this.itemsFiltered.length }
 
     getItems() { return this.itemsFiltered }
 
@@ -48,10 +50,10 @@ export class PersonListViewModel {
         this.itemSelected = value
     }
 
-    getNameFilter() { return this.nameFilter }
+    get nameFilter() : string { return this._nameFilter }
 
-    setNameFilter(value: string) {
-        if (this.nameFilter != value) return
+    set nameFilter(value: string) {
+        if (this._nameFilter != value) return
 
         this.updateItemsFiltered()
     }
@@ -87,7 +89,7 @@ export class PersonListViewModel {
     private getFilteredList(): PersonViewModel[] {
         var source = this.personRepository.GetPersonList().map(this.newPersonViewModel.bind(this));
 
-        let nameFilterTrimmed = this.nameFilter.trim()
+        let nameFilterTrimmed = this._nameFilter.trim()
         if (nameFilterTrimmed.length > 0) {
             source = source.filter(
                 i => i.getFirstName().includes(nameFilterTrimmed)

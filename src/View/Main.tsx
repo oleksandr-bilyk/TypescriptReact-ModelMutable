@@ -1,33 +1,28 @@
 import React from 'react';
-import * as ApplicationViewModel from './../ViewModel/ApplicationViewModel';
-import {PersonListViewModel} from './../ViewModel/DonorsListModels/PersonListViewModel'
+import {PersonListViewModel, PersonViewModel} from './../ViewModel/DonorsListModels/PersonListViewModel'
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
-import { filter } from 'minimatch';
+import {Event} from "./../ViewModel/Events/Event";
+import {PersonFilter} from "./PersonFilter"
 
-type MainParam = {
-    model: PersonListViewModel
-}
+type MainParam = { model: PersonListViewModel }
 
 function Main(param: MainParam) {
     return <Stack>
-        <Filter model={param.model}/>
+        <PersonFilter model={param.model}/>
         <Items model={param.model}/>
     </Stack>
 }
 
-function Filter(param: MainParam){
-    return <Stack>
-        <h3>
-            {"Donors Filter (" + param.model.getItems().length + " items)"}
-        </h3>
-        <Stack horizontal>
-            <span>Name Fileter</span>
-            <span>Blood Group Filter</span>
-        </Stack>
-    </Stack>
+interface ItemsModel{
+    getItems(): PersonViewModel[]
+    getItemsChangedEvent(): Event<void>
 }
 
-function Items(param: MainParam)
+type ItemsParam = {
+    model: ItemsModel
+}
+
+function Items(param: ItemsParam)
 {
     let [state, setState] = React.useState(
         {
@@ -38,7 +33,7 @@ function Items(param: MainParam)
     state.model.getItemsChangedEvent().add(
         () => {
             setState(
-                (prevState: {model: PersonListViewModel}) =>{
+                (prevState: {model: ItemsModel}) =>{
                     return {...prevState}
                 }
             )
@@ -46,7 +41,7 @@ function Items(param: MainParam)
     )
 
     let items = state.model.getItems().map(
-        i => <li key={i.getPersonId()}>{i.getTitle()}</li>
+        i => <li key={i.getPersonId().toString()}>{i.getTitle()}</li>
     );
 
     return <ul>{items}</ul>
