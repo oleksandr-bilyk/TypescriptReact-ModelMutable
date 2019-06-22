@@ -5,8 +5,8 @@ import {BloodGroupRequiredSelectionViewModel} from './Common/BloodGroupModels/Bl
 import {Person, newPersonId} from './../DomainModel/Person'
 
 export class AddPersonModels{
-    private firstName: string = ''
-    private lastName: string = ''
+    private _firstName: string = ''
+    private _lastName: string = ''
     readonly birthDate: BirthDateViewModel
     readonly gender: GenderSelectionViewModel
     readonly blodGroup: BloodGroupRequiredSelectionViewModel
@@ -17,52 +17,53 @@ export class AddPersonModels{
         this.blodGroup = new BloodGroupRequiredSelectionViewModel()
     }
 
-    getFirstName():string{
-        return this.firstName
+    get firstName():string{
+        return this._firstName
     }
 
-    setFirstName(value: string){
-        this.firstName = value
+    set firstName(value: string){
+        this._firstName = value
     }
-    getFirstNameError(): string | undefined {
-        if (this.firstName.length > 0) return undefined;
+
+    get firstNameError(): string | undefined {
+        if (this._firstName.length > 0) return undefined;
         else return "First Name is required.";
     }
 
-    getLastName():string{
-        return this.lastName
+    get lastName():string{
+        return this._lastName
     }
 
-    setLastName(value: string){
-        this.lastName = value
+    set lastName(value: string){
+        this._lastName = value
     }
 
-    getLastNameError(): string | undefined {
-        if (this.lastName.length > 0) return undefined;
+    get lastNameError(): string | undefined {
+        if (this._lastName.length > 0) return undefined;
         else return "Last Name is required.";
     }
 
     testError(){
-        return this.getFirstNameError() !== undefined || this.getLastNameError() !== undefined;
+        return this.firstNameError !== undefined || this.lastNameError !== undefined;
     }
 
     private readonly newPersonEvent: EventArray<Person> = new EventArray()
 
     getNewPersonEvent(): Event<Person>{return this.newPersonEvent}
 
-    add(): void{
+    add(): void {
         let p = new Person(
             newPersonId(),
-            this.firstName,
-            this.lastName,
-            this.birthDate.getDate(),
+            this._firstName,
+            this._lastName,
+            this.birthDate.value,
             this.gender.getValue(),
             this.blodGroup.getValue()
         )
 
         this.newPersonEvent.rise(p)
 
-        this.firstName = ''
-        this.lastName = ''
+        this._firstName = ''
+        this._lastName = ''
     }
 }

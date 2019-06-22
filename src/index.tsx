@@ -1,5 +1,5 @@
 import {newApplicationViewModel} from './ViewModel/CompositionRoot'
-import Main from './View/Main'
+import {Main} from './View/MainView'
 import * as ReactDOM from 'react-dom';
 import React from 'react';
 import AddUserView from "./View/AddPersonView"

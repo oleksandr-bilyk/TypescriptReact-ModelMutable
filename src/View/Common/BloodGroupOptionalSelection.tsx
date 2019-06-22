@@ -16,11 +16,17 @@ type BloodGroupOptionalParam = { model: BloodGroupOptionalSelectionViewModel }
 export function BloodGroupOptionalSelection(param: BloodGroupOptionalParam){
     let [state, setState] = React.useState<BloodGroupOptionalParam>(param)
 
-    return <Stack>
-        <Dropdown 
+    return <Dropdown 
         label="Blood Group"
-        options={param.model.items.map<IDropdownOption>(
-            i => new BloodGroupOptionPresentationModel(i))
+        options={
+            param.model.items.map<IDropdownOption>(
+                i => {
+                    return {
+                        key: getBloodGroupOptionPresentationModelKey(i.value) as string | number,
+                        text: i.title
+                    }
+                }
+            )
         }
         selectedKey = {getBloodGroupOptionPresentationModelKey(param.model.itemSelected.value)}
         onChange = {(event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption, index?: number) => {
@@ -32,8 +38,8 @@ export function BloodGroupOptionalSelection(param: BloodGroupOptionalParam){
             }
         }}
         />
-    </Stack>
 }
+
 const bloodGroupOptionPresentationModelKeyNull = "null"
 function getBloodGroupOptionPresentationModelKey(value: BloodGroupOptionalViewModelValue): string | number{
     if (value == null) return bloodGroupOptionPresentationModelKeyNull;
@@ -48,13 +54,4 @@ function getBloodGroupOptionPresentationModelValue(key: string | number): BloodG
     else {
         return key as number as BlodGroup
     }
-}
-
-class BloodGroupOptionPresentationModel implements IDropdownOption{
-    constructor(readonly model: BloodGroupOptionalViewModel){
-        this.key = getBloodGroupOptionPresentationModelKey(model.value)
-        this.text = model.title
-    }
-    key: string | number
-    text: string
 }

@@ -1,7 +1,7 @@
 import {Gender} from './../../DomainModel/Person'
 
 export class GenderSelectionViewModel{
-    private itemSelected: GenderViewModel
+    private _itemSelected: GenderViewModel
     items: GenderViewModel[]
     
     constructor(){
@@ -9,19 +9,31 @@ export class GenderSelectionViewModel{
             new GenderViewModel("Male", "male"),
             new GenderViewModel("Female", "female")
         ]
-        this.itemSelected = this.items[0]
+        this._itemSelected = this.items[0]
     }
 
-    getItemSelected(){ return this.itemSelected }
+    get itemSelected(){ return this._itemSelected }
     
-    setItemSelected(value: GenderViewModel){ 
-        if (this.items.includes(value)){
+    set itemSelected(value: GenderViewModel){ 
+        if (!this.items.includes(value)){
             throw Error("Not known value.")
         }
-        this.itemSelected = value
+        
+        this._itemSelected = value
     }
 
-    getValue(){return this.itemSelected.gender}
+    setItemByValue(value: Gender){
+        for (var i in this.items){
+            let item = this.items[i]
+            if (item.gender == value){
+                this.itemSelected = item
+                return;
+            }
+        }
+        throw Error("Not known value.")
+    }
+
+    getValue(){return this._itemSelected.gender}
 }
 
 export class GenderViewModel{

@@ -36,7 +36,7 @@ export class PersonListViewModel {
         this.updateItemsFiltered()
     }
 
-    getItemsChangedEvent(): Event<void> { return this.itemsChangedEvent }
+    get itemsChanged(): Event<void> { return this.itemsChangedEvent }
 
     getItemsCount() {return this.itemsFiltered.length }
 

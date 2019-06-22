@@ -2,28 +2,29 @@ export class BirthDateViewModel{
     constructor(){
         let now = new Date();
         let millisecPerDay = 1000 * 60 * 24
-        this.minValue = new Date(now.getTime() - 365 * 150 * millisecPerDay);
+        this.minValue = new Date(now)
+        this.minValue.setFullYear(this.minValue.getFullYear() - 150)
         this.maxValue = now;
-        this.date = this.maxValue;
+        this._value = this.maxValue;
     }
 
     readonly minValue: Date
 
     readonly maxValue: Date
 
-    private date: Date
+    private _value: Date
 
-    getDate() {
-        return this.date
+    get value() : Date{
+        return this._value
     }
 
-    setDate(value: Date)
+    set value(value: Date)
     {
         if (value < this.minValue || value > this.maxValue)
         {
             return;
         }
 
-        this.date = value;
+        this._value = value;
     }
 }
