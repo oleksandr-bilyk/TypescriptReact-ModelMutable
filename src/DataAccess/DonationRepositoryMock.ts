@@ -9,11 +9,11 @@ export class DonationRepositoryMock implements DonationRepository{
         this.items = []
     }
 
-    GetDonorRecords(personId: PersonId): Donation[] {
-        throw new Error("Method not implemented.");
+    getDonorRecords(personId: PersonId): Donation[] {
+        return this.items.filter(i => i.personId === personId)
     }    
     
-    Add(personId: PersonId, record: Donation): void {
+    add(personId: PersonId, record: Donation): void {
         this.items.push(
             new DbRecord(
                 personId,
@@ -23,11 +23,11 @@ export class DonationRepositoryMock implements DonationRepository{
         )
     }
 
-    RemoveByPersonAt(personId: PersonId, at: Date): void {
+    removeByPersonAt(personId: PersonId, at: Date): void {
         this.removeByPredicate(item => item.personId === personId && item.at === at)
     }
 
-    RemoveByPerson(personId: PersonId): void {
+    removeByPerson(personId: PersonId): void {
         this.removeByPredicate(item => item.personId === personId)
     }
 

@@ -15,6 +15,6 @@ export class ApplicationViewModel{
     }
 
     private onNewPerson(person: Person){
-        this.donorsList.Add(person)
+        this.donorsList.add(person)
     }
 }

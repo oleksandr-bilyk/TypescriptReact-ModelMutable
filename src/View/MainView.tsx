@@ -1,8 +1,39 @@
 import React from 'react';
 import { Stack } from 'office-ui-fabric-react/lib/Stack';
 import {PersonListViewModel, PersonViewModel} from '../ViewModel/DonorsListModels/PersonListViewModel'
-import {Event} from "../ViewModel/Events/Event";
+import {Event as MyEvent} from "../ViewModel/Events/Event";
 import {PersonFilter} from "./PersonFilter"
+import { List, } from 'office-ui-fabric-react/lib/List';
+import { mergeStyleSets, IRawStyle } from 'office-ui-fabric-react/lib/Styling';
+import { DefaultButton } from 'office-ui-fabric-react';
+import {PersonDonations} from './PersonDonations'
+
+const commonStyles: IRawStyle = {
+    display: 'inline-block',
+    cursor: 'default',
+    boxSizing: 'border-box',
+    verticalAlign: 'top',
+    background: 'none',
+    backgroundColor: 'transparent',
+    border: 'none'
+  };
+  const classNames = mergeStyleSets({
+    item: {
+      selectors: {
+        '&:hover': { background: '#eee' }
+      }
+    },
+    // Overwrites the default style for Button
+    check: [commonStyles, { padding: '11px 8px' }],
+    cell: [
+      commonStyles,
+      {
+        overflow: 'hidden',
+        height: 36,
+        padding: 8
+      }
+    ]
+  });
 
 type MainParam = { model: PersonListViewModel }
 
@@ -13,36 +44,66 @@ export function Main(param: MainParam) {
     </Stack>
 }
 
-interface ItemsModel{
-    getItems(): PersonViewModel[]
-    itemsChanged: Event<void>
+interface PersonListModel{
+    items: PersonViewModel[]
+    itemSelected: PersonViewModel | null
+    itemsChanged: MyEvent<void>
 }
 
-type ItemsParam = {
-    model: ItemsModel
+type PersonListParam = {
+    model: PersonListModel
 }
 
-function PersonList(param: ItemsParam)
+class PersonList extends React.Component<PersonListParam, any>
 {
-    let [state, setState] = React.useState(
-        {
-            model: param.model
-        }
-    )
+    constructor(param: PersonListParam){
+        super(param)
 
-    state.model.itemsChanged.add(
-        () => {
-            setState(
-                (prevState: {model: ItemsModel}) =>{
-                    return {...prevState}
+        param.model.itemsChanged.add(this.onItemsChanged)
+    }
+    private onItemsChanged = () => {
+        this.forceUpdate()
+    }
+
+    public render(){
+        return <div>
+          <div>
+            <div style={{width: 'auto', float:"right"}}>
+              {
+                this.props.model.itemSelected !== null && 
+                <PersonDonations 
+                  model={(this.props.model.itemSelected as PersonViewModel).donations}/>
+              }
+            </div>
+            <div style={{width: 'auto', height: '100px'}}>
+              <List 
+                items={this.props.model.items} 
+                onRenderCell={
+                    (item, index, isScrolling) => 
+                        this._onRenderCell(item as PersonViewModel, index as number)
                 }
-            )
-        }
-    )
+                getKey={this.getKey}
+              />
+            </div>
+            
+          </div>
+        </div>
+    }
 
-    let items = state.model.getItems().map(
-        i => <li key={i.getPersonId().toString()}>{i.getTitle()}</li>
-    );
+    private getKey = (item: PersonViewModel, index?: number)=> { 
+        return item.getPersonId() as string
+    }
 
-    return <ul>{items}</ul>
+    private _onRenderCell(item: PersonViewModel, index: number){
+        return <Stack horizontal>
+            <div style={{minWidth: 200}}>{item.getTitle()}</div>
+            <DefaultButton text="Donations" onClick={(_) =>{this.onDonationsOpenButtonClick(item)}}/>
+        </Stack>
+    }
+
+    private onDonationsOpenButtonClick(item: PersonViewModel)
+    {
+      this.props.model.itemSelected = item
+      this.forceUpdate();
+    }
 }

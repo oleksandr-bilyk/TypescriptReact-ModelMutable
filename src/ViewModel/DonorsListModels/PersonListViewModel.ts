@@ -4,7 +4,7 @@ import {getBloodGroupTitle} from "./../../DomainModel/BlodGroup";
 import {Person, PersonId, PersonNameCompare} from "./../../DomainModel/Person";
 import {BloodGroupOptionalSelectionViewModel} from "./../../ViewModel/Common/BloodGroupModels/BloodGroupOptionalSelectionViewModel";
 import {Event, EventArray} from "./../../ViewModel/Events/Event";
-import {DonationListViewModel} from "./Donations/DonationListViewModel";
+import {DonationListViewModel, DonationListViewModelFactory} from "./Donations/DonationListViewModel";
 
 export interface DataAccessProvider{
     personRepository: PersonRepository
@@ -20,7 +20,7 @@ export class PersonListViewModel {
     private readonly itemsChangedEvent: EventArray<void> = new EventArray()
     private _nameFilter: string = ""
     private itemsFiltered: PersonViewModel[] = []
-    private itemSelected: PersonViewModel | null = null
+    private _itemSelected: PersonViewModel | null = null
 
     constructor(
         dataAccess: DataAccessProvider,
@@ -40,14 +40,14 @@ export class PersonListViewModel {
 
     getItemsCount() {return this.itemsFiltered.length }
 
-    getItems() { return this.itemsFiltered }
+    get items() { return this.itemsFiltered }
 
-    getItemSelected(): PersonViewModel | null { return this.itemSelected }
+    public get itemSelected(): PersonViewModel | null { return this._itemSelected }
 
-    setItemSelected(value: PersonViewModel | null) {
+    public set itemSelected(value: PersonViewModel | null) {
         if (value != null && !this.itemsFiltered.includes(value)) throw Error("Unknown value.")
 
-        this.itemSelected = value
+        this._itemSelected = value
     }
 
     get nameFilter() : string { return this._nameFilter }
@@ -58,7 +58,7 @@ export class PersonListViewModel {
         this.updateItemsFiltered()
     }
 
-    Add(person: Person) {
+    add(person: Person) {
         this.personRepository.AddPerson(person)
 
         this.updateItemsFiltered()
@@ -76,12 +76,12 @@ export class PersonListViewModel {
     }
 
     private removePersonTransaction(person: PersonViewModel) {
-        this.donationRepository.RemoveByPerson(person.getPersonId())
+        this.donationRepository.removeByPerson(person.getPersonId())
         this.personRepository.Remove(person.getPersonId())
     }
 
     private updateItemsFiltered() {
-        this.setItemSelected(null)
+        this.itemSelected = null
         this.itemsFiltered = this.getFilteredList()
         this.itemsChangedEvent.rise()
     }
@@ -92,28 +92,27 @@ export class PersonListViewModel {
         let nameFilterTrimmed = this._nameFilter.trim()
         if (nameFilterTrimmed.length > 0) {
             source = source.filter(
-                i => i.getFirstName().includes(nameFilterTrimmed)
+                i => i.firstName.includes(nameFilterTrimmed)
                     ||
-                    i.getLastName().includes(nameFilterTrimmed)
+                    i.lastName.includes(nameFilterTrimmed)
             );
         }
 
         let bloodGroupFilter = this.bloodGroupFilter.getValue();
         if (bloodGroupFilter != null) {
-            source = source.filter(i => i.getBloodGroup() == bloodGroupFilter);
+            source = source.filter(i => i.bloodGroup == bloodGroupFilter);
         }
 
+        var s = source[0].firstName
         return source.sort(PersonNameCompare.compare);
     }
 }
 
 export type PersonViewModelFactory = (person: Person) => PersonViewModel
 
-export type DonationListViewModelFactory = (personId: PersonId) => DonationListViewModel
-
 export class PersonViewModel {
     private data: Person
-    donations: DonationListViewModel
+    public donations: DonationListViewModel
     private readonly removingEvent: EventArray<PersonViewModel> = new EventArray()
 
     constructor(
@@ -121,18 +120,21 @@ export class PersonViewModel {
         donationListViewModelFactory: DonationListViewModelFactory) {
         this.data = person
 
-        this.donations = donationListViewModelFactory(person.id)
+        this.donations = donationListViewModelFactory(person)
+        this.key = person.id as string
     }
+
+    key?: string | number
 
     getRemovingEvent(): EventArray<PersonViewModel> { return this.removingEvent }
 
     getPersonId() { return this.data.id }
 
-    getFirstName() { return this.data.firstName }
+    get firstName(): string { return this.data.firstName }
 
-    getLastName() { return this.data.lastName }
+    get lastName() { return this.data.lastName }
 
-    getBloodGroup() { return this.data.blodGroup }
+    get bloodGroup() { return this.data.blodGroup }
 
     getTitle(): string {
         return this.data.firstName +

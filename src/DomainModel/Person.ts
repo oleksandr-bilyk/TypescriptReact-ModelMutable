@@ -8,15 +8,15 @@ export function newPersonId(){ return <PersonId>newGuid()}
 export type Gender = 'male' | 'female'
 
 export interface PersonName{
-    getFirstName(): string
-    getLastName(): string
+    firstName: string
+    lastName: string
 }
 
 export class PersonNameCompare{
     static compare<T extends PersonName>(a: T, b:T){
-        var c = a.getFirstName().localeCompare(b.getFirstName())
+        var c = a.firstName.localeCompare(b.firstName)
         if (c != 0) return c
-        else return a.getLastName().localeCompare(b.getLastName())
+        else return a.lastName.localeCompare(b.lastName)
     }
 }
 
@@ -32,10 +32,9 @@ export class Person implements PersonName{
     ){
     }
 
+    get nameTitle(): string  {return this.firstName + " " + this.lastName}
+
     getAge(): number{
         return new Date().getFullYear() - this.birthDate.getFullYear()
     }
-
-    getFirstName(): string { return this.firstName }
-    getLastName(): string { return this.lastName }
 }

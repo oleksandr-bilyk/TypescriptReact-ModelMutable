@@ -1,32 +1,50 @@
 import {Donation} from './../../../DomainModel/Donation'
-import {PersonId} from './../../../DomainModel/Person'
+import {PersonId, Person} from './../../../DomainModel/Person'
 import {AddDonationViewModel} from './AddDonationViewModel'
 import {DonationRepository} from './../../../DataAccess/DonationRepository'
-import {DonationRepositoryMock} from './../../../DataAccess/DonationRepositoryMock'
 import {Event, EventArray} from './../../Events/Event'
+
+export interface DenationListPerson{
+    id: PersonId,
+    nameTitle: string
+}
+
+export type DonationListViewModelFactory = (person: DenationListPerson) => DonationListViewModel
 
 export class DonationListViewModel{
     readonly addForm: AddDonationViewModel
-    private readonly personId: PersonId
-    private items: DonationViewModel[] = []
+    private readonly person: DenationListPerson
+    private _items: DonationViewModel[] = []
+    private readonly itemsChangedEvent: EventArray<void> = new EventArray()
     private donationRepository: DonationRepository
 
-    constructor(personId: PersonId, donationRepository: DonationRepository){
-        this.personId = personId
+    get itemsChanged(): Event<void> { return this.itemsChangedEvent } 
+
+    constructor(person: DenationListPerson, donationRepository: DonationRepository){
+        this.person = person
         this.donationRepository = donationRepository
 
         this.addForm = new AddDonationViewModel()
         this.addForm.getNewDonationEvent().add(this.onNewDonation.bind(this))
-    }
-
-    private onNewDonation(donation: Donation){
-        this.donationRepository.Add(this.personId, donation)
         this.updateItems()
     }
 
+    get personTitle(): string { return this.person.nameTitle }
+
+    private onNewDonation(donation: Donation){
+        this.donationRepository.add(this.person.id, donation)
+        this.updateItems()
+    }
+
+    get items(){ 
+        return this._items 
+    }
+
     private updateItems(){
-        this.items = this.donationRepository.GetDonorRecords(this.personId)
+        this._items = this.donationRepository.getDonorRecords(this.person.id)
         .map(i => this.newDonationViewModel(i))
+
+        this.itemsChangedEvent.rise()
     }
 
     private newDonationViewModel(donation: Donation){
@@ -36,7 +54,7 @@ export class DonationListViewModel{
     }
 
     private onItemRemoving(item: DonationViewModel){
-        this.donationRepository.RemoveByPersonAt(this.personId, item.data.at)
+        this.donationRepository.removeByPersonAt(this.person.id, item.data.at)
         this.updateItems()
     }
 }
@@ -51,6 +69,8 @@ export class DonationViewModel{
 
     constructor(donation: Donation){
         this.data = donation
-        this.title = donation.at.toString() + ", " + donation.volume + " ml";
+
+        var at = donation.at
+        this.title = at.getFullYear()+'-'+at.getMonth()+'-'+at.getDate() + ", " + donation.volume + " ml";
     }
 }

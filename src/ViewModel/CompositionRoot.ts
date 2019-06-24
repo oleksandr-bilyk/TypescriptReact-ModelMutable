@@ -6,10 +6,12 @@ import {DonationRepository} from "./../DataAccess/DonationRepository"
 import {
     PersonListViewModel,
     PersonViewModelFactory,
-    PersonViewModel,
-    DonationListViewModelFactory
+    PersonViewModel
 } from "./DonorsListModels/PersonListViewModel"
-import {DonationListViewModel} from "./DonorsListModels/Donations/DonationListViewModel"
+import {
+    DonationListViewModel,
+    DonationListViewModelFactory
+} from "./DonorsListModels/Donations/DonationListViewModel"
 
 export function newApplicationViewModel(){
     let personRepository: PersonRepository = new PersonRepositoryMock();
